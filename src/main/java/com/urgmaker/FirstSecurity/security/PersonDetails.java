@@ -1,11 +1,13 @@
 package com.urgmaker.FirstSecurity.security;
 
 import com.urgmaker.FirstSecurity.models.Person;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
+@Getter
 public class PersonDetails implements UserDetails {
 
     private final Person person;
@@ -49,7 +51,4 @@ public class PersonDetails implements UserDetails {
         return true;
     }
 
-    public Person getPerson() {
-        return this.person;
-    }
 }
