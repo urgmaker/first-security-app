@@ -3,6 +3,7 @@ package com.urgmaker.FirstSecurity.services;
 import com.urgmaker.FirstSecurity.models.Person;
 import com.urgmaker.FirstSecurity.repositories.PeopleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,15 +23,13 @@ public class PersonDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Person> person = peopleRepository.findByUsername(username);
+        Person person = peopleRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        if (person.isEmpty()) {
-            throw new UsernameNotFoundException("User not found");
-        }
 
         return new org.springframework.security.core.userdetails.User(
-                person.get().getUsername(),
-                person.get().getPassword(),
+                person.getUsername(),
+                person.getPassword(),
                 Collections.emptyList()
         );
     }
