@@ -1,22 +1,21 @@
 package com.urgmaker.FirstSecurity.utils;
 
 import com.urgmaker.FirstSecurity.models.Person;
-import com.urgmaker.FirstSecurity.services.PeopleService;
+import com.urgmaker.FirstSecurity.services.PersonDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import java.util.Optional;
-
 @Component
 public class PersonValidator implements Validator {
-    private final PeopleService peopleService;
+    private final PersonDetailsService personDetailsService;
+
 
     @Autowired
-    public PersonValidator(PeopleService peopleService) {
-        this.peopleService = peopleService;
+    public PersonValidator( PersonDetailsService personDetailsService) {
+        this.personDetailsService = personDetailsService;
     }
 
     @Override
@@ -29,7 +28,7 @@ public class PersonValidator implements Validator {
         Person person = (Person) target;
 
         try {
-            peopleService.findByUsername(person.getUsername());
+            personDetailsService.loadUserByUsername(person.getUsername());
         } catch (UsernameNotFoundException ignored) {
             return;
         }
